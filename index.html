@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en-KE">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#071B33" />
+    <!-- Favicons generated from the institute's logo (public/images/schoolLogo.jpeg). -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <!-- Temporary: the hero placeholder is served by Unsplash. Remove once images are local. -->
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+    <!--
+      No static page title here on purpose. Each route's title and description are injected by
+      the build-time prerender (scripts/prerender.mjs) and set again on the client by Seo
+      (src/components/shared/Seo.jsx); a hard-coded one would shadow the page's own.
+    -->
+    <!--
+      Organisation structured data. Confirmed contact facts only — no ratings, social profiles,
+      founding date or accreditation, none of which the institute has verified. Add "url" once
+      the domain is known (docs/CONTENT-TO-CONFIRM.md); "logo" resolves against the page URL.
+    -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "EducationalOrganization",
+        "name": "Motech Technology Training Institute",
+        "description": "Technical and vocational training college in Nairobi CBD offering diploma and certificate courses in ICT, business, accounting, health, hospitality and languages.",
+        "logo": "/favicon-512.png",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Mwalimu Coop House, Tom Mboya Street",
+          "addressLocality": "Nairobi",
+          "addressRegion": "Nairobi",
+          "postalCode": "00100",
+          "addressCountry": "KE"
+        },
+        "telephone": "+254722330670",
+        "email": "technologymotech@gmail.com",
+        "areaServed": "Nairobi, Kenya"
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
