@@ -1,31 +1,33 @@
-import { Check, MapPin, MonitorSmartphone, School } from 'lucide-react'
+import { Award, Clock, MapPin, MonitorSmartphone, School } from 'lucide-react'
+import { siteConfig } from '../config/site'
+import { campusImages } from '../data/campus'
 import { cityImage } from '../data/media'
+import { accreditedBy, background, coreValues, mission, vision, whyMotech } from '../data/institute'
+import { courses } from '../lib/courses'
+import { schools } from '../data/schools'
+import AccreditationBadges from '../components/shared/AccreditationBadges'
 import EnquiryActions from '../components/shared/EnquiryActions'
 import Seo from '../components/shared/Seo'
-import SubjectAreas from '../components/shared/SubjectAreas'
+import SchoolList from '../components/shared/SchoolList'
 import Button from '../components/ui/Button'
 import Reveal from '../components/ui/Reveal'
 import Section from '../components/ui/Section'
 import SectionHeading from '../components/ui/SectionHeading'
 
 /**
- * What the institute is, in verified facts only.
+ * What the institute is, in the institute's own words.
  *
- * Motech has not supplied a history, mission, values, achievements or staff biographies, so
- * none appear here. The page describes where it is, what it teaches and how, and is honest
- * about what it cannot yet state. See docs/CONTENT-TO-CONFIRM.md.
+ * The background, vision, mission, values and reasons-to-choose on this page are the
+ * brochure's, lifted from src/data/institute.js rather than written here, so the page cannot
+ * drift from the document it came from. See docs/BROCHURE-TRANSCRIPTION.md §2–§4.
  */
 
 const atAGlance = [
   { icon: School, label: 'Type', value: 'Technical and vocational training college' },
+  { icon: Award, label: 'Registration', value: siteConfig.registration },
   { icon: MapPin, label: 'Where', value: 'Tom Mboya Street, Nairobi CBD' },
-  { icon: MonitorSmartphone, label: 'Study modes', value: 'In class, online or blended' },
-]
-
-const whatThisSiteCovers = [
-  'What each course covers, the level it leads to and how long it runs.',
-  'Which courses are taught in class, online, or as a mix of the two.',
-  'How to reach the institute about fees, entry requirements and intake dates.',
+  { icon: MonitorSmartphone, label: 'Study modes', value: siteConfig.studyModes.join(' or ') },
+  { icon: Clock, label: 'Classes', value: 'Early morning, full time and evening' },
 ]
 
 export default function About() {
@@ -44,8 +46,8 @@ export default function About() {
             About Motech
           </h1>
           <p className="mt-4 max-w-2xl text-lg leading-relaxed text-white/80">
-            A technical training institute in the centre of Nairobi, teaching diploma and
-            certificate courses across six subject areas.
+            {siteConfig.tagline}. A technical training institute in the centre of Nairobi, teaching{' '}
+            {courses.length} courses across {schools.length} schools.
           </p>
         </div>
       </div>
@@ -54,37 +56,34 @@ export default function About() {
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-7">
             <div className="flex max-w-xl flex-col gap-4 text-lg leading-relaxed text-ink">
-              <p>
-                Motech Technology Training Institute is a technical and vocational training college
-                on Tom Mboya Street, in the Nairobi central business district, opposite
-                Ambassador&rsquo;s Hotel and close to the city&rsquo;s main matatu and bus routes.
-              </p>
-              <p>
-                It teaches twelve diploma and certificate courses across six subject areas: ICT and
-                computer studies, business and management, accounting and finance, health and
-                nutrition, hospitality, and languages.
-              </p>
-              <p>
-                Courses are taught in class, online, or as a mix of the two, so that study can fit
-                around work and other commitments. The institute confirms entry requirements, fees
-                and intake dates when you enquire about a particular course.
-              </p>
+              {background.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
             </div>
           </div>
 
           <div className="lg:col-span-5">
-            <ul className="rounded-xl border border-line bg-white p-6">
+            <div className="mb-6 overflow-hidden rounded-xl">
+              <img
+                src={campusImages[1].src}
+                alt={campusImages[1].alt}
+                loading="lazy"
+                decoding="async"
+                className="h-48 w-full object-cover"
+              />
+            </div>
+            <ul className="rounded-xl border border-line glass-card p-6">
               {atAGlance.map(({ icon: Icon, label, value }) => (
                 <li
                   key={label}
                   className="flex gap-4 border-b border-line py-4 first:pt-0 last:border-b-0 last:pb-0"
                 >
-                  <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-navy-950 text-accent">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-accent/15 text-accent">
                     <Icon aria-hidden="true" className="size-5" />
                   </span>
                   <span>
                     <span className="block text-sm text-muted">{label}</span>
-                    <span className="block font-semibold text-navy-950">{value}</span>
+                    <span className="block font-semibold text-head">{value}</span>
                   </span>
                 </li>
               ))}
@@ -93,44 +92,81 @@ export default function About() {
         </div>
       </Section>
 
-      <Section className="bg-white" aria-labelledby="areas-heading">
-        <SectionHeading
-          id="areas-heading"
-          title="What you can study"
-          lead="Six subject areas, twelve courses in total. Choose an area to see the courses in it."
-        />
-        <Reveal className="mt-10">
-          <SubjectAreas />
-        </Reveal>
+      <Section className="glass-soft border-y border-line" aria-labelledby="purpose-heading">
+        <SectionHeading id="purpose-heading" title="What moves us forward" />
+        <div className="mt-10 grid gap-6 lg:grid-cols-2">
+          <div className="rounded-xl border border-line glass-soft p-6 sm:p-8">
+            <h3 className="text-sm font-bold tracking-wide text-accent uppercase">Vision</h3>
+            <p className="mt-3 text-lg leading-relaxed text-ink">{vision}</p>
+          </div>
+          <div className="rounded-xl border border-line glass-soft p-6 sm:p-8">
+            <h3 className="text-sm font-bold tracking-wide text-accent uppercase">Mission</h3>
+            <p className="mt-3 text-lg leading-relaxed text-ink">{mission}</p>
+          </div>
+        </div>
+
+        <h3 className="mt-12 text-xl font-bold text-head">Core values</h3>
+        <dl className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {coreValues.map(({ name, description }) => (
+            <div key={name} className="rounded-xl border border-line p-5">
+              <dt className="font-bold text-head">{name}</dt>
+              <dd className="mt-1.5 text-sm leading-relaxed text-muted">{description}</dd>
+            </div>
+          ))}
+        </dl>
       </Section>
 
-      <Section aria-labelledby="honesty-heading">
-        <div className="grid gap-10 rounded-2xl border border-line bg-white p-8 lg:grid-cols-12 lg:p-10">
-          <div className="lg:col-span-6">
-            <SectionHeading id="honesty-heading" title="What this website can tell you" />
-            <p className="mt-4 text-muted">
-              This site is built on information the institute has confirmed. Where a detail is not
-              yet confirmed, it says so and points you to the institute, rather than publishing a
-              figure it cannot stand behind.
-            </p>
-            <EnquiryActions className="mt-6" />
-          </div>
-          <ul className="flex flex-col gap-4 lg:col-span-6 lg:border-l lg:border-line lg:pl-10">
-            {whatThisSiteCovers.map((item) => (
-              <li key={item} className="flex gap-3">
-                <Check aria-hidden="true" className="mt-1 size-4 shrink-0 text-accent-600" />
-                <span className="text-ink">{item}</span>
-              </li>
-            ))}
-          </ul>
+      <Section aria-labelledby="why-heading">
+        <SectionHeading
+          id="why-heading"
+          title="Why Motech"
+          lead="What the institute offers its students, in its own words."
+        />
+        <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {whyMotech.map(({ icon: Icon, text }, index) => (
+            <Reveal
+              as="li"
+              key={text}
+              delay={(index % 3) * 80}
+              className="flex gap-4 rounded-xl border border-line glass-card p-5"
+            >
+              <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-accent/15 text-accent">
+                <Icon aria-hidden="true" className="size-5" />
+              </span>
+              <span className="self-center text-ink">{text}</span>
+            </Reveal>
+          ))}
+        </ul>
+
+        <div className="mt-10 border-t border-line pt-8">
+          <h3 className="text-xs font-bold tracking-[0.12em] text-muted uppercase">
+            Accredited and examining bodies
+          </h3>
+          <AccreditationBadges className="mt-4" />
+          <p className="mt-5 max-w-3xl text-sm text-muted">
+            Motech states that it is registered and accredited by {accreditedBy.join(', ')}, under
+            registration number {siteConfig.registration}. Ask to see the certificate for any
+            qualification that matters to you.
+          </p>
         </div>
       </Section>
 
-      <section className="bg-navy-950 py-14 text-white sm:py-16">
+      <Section className="glass-soft border-y border-line" aria-labelledby="areas-heading">
+        <SectionHeading
+          id="areas-heading"
+          title="What you can study"
+          lead={`${schools.length} schools, ${courses.length} courses in total. Choose a school to see the courses in it.`}
+        />
+        <Reveal className="mt-10">
+          <SchoolList />
+        </Reveal>
+      </Section>
+
+      <section className="glass-soft border-y border-line py-14 sm:py-16">
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
           <div>
-            <h2 className="text-2xl font-bold">Find the right course</h2>
-            <p className="mt-2 max-w-xl text-white/80">
+            <h2 className="text-2xl font-bold text-head">Find the right course</h2>
+            <p className="mt-2 max-w-xl text-muted">
               Browse the full catalogue, or ask the institute which course fits what you want to do.
             </p>
           </div>
@@ -144,6 +180,18 @@ export default function About() {
           </div>
         </div>
       </section>
+
+      <Section aria-labelledby="enquire-heading">
+        <div className="rounded-2xl border border-line glass-card p-8 lg:p-10">
+          <SectionHeading id="enquire-heading" title="Ask us anything" />
+          <p className="mt-4 max-w-2xl text-muted">
+            Fees, entry requirements and durations are listed for every course on this site, taken
+            from the institute&rsquo;s own brochure. Confirm the current figures with the institute
+            before you enrol or pay.
+          </p>
+          <EnquiryActions className="mt-6" />
+        </div>
+      </Section>
     </>
   )
 }

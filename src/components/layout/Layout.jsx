@@ -14,9 +14,12 @@ export default function Layout() {
       >
         Skip to main content
       </a>
+      {/* The surface every glass pane on the site is blurring. Fixed, so it stays put while
+          the content scrolls over it. Decorative, and inert to pointers. */}
+      <div aria-hidden="true" className="page-backdrop" />
       <ScrollToTop />
       <SiteHeader />
-      <main id="main" tabIndex={-1} className="bg-paper outline-none">
+      <main id="main" tabIndex={-1} className="outline-none">
         <Outlet />
       </main>
       <SiteFooter />

@@ -2,11 +2,12 @@ import { useEffect, useRef } from 'react'
 import { NavLink } from 'react-router'
 import { Phone, X } from 'lucide-react'
 import { mainPhone } from '../../config/site'
+import { actionNav } from '../../data/navigation'
 import { telHref } from '../../lib/contactLinks'
 import Button from '../ui/Button'
 
 const linkClass = ({ isActive }) =>
-  `block rounded-lg px-4 py-3 text-xl font-bold transition-colors ${
+  `flex items-center gap-4 rounded-lg px-4 py-3 text-xl font-bold transition-colors ${
     isActive ? 'bg-white/10 text-accent' : 'text-white hover:bg-white/5'
   }`
 
@@ -55,10 +56,11 @@ export default function MobileMenu({ open, onClose, items }) {
 
         <nav aria-label="Main" className="mt-4 flex-1">
           <ul className="flex flex-col gap-1">
-            {items.map((item) => (
-              <li key={item.to}>
-                <NavLink to={item.to} end={item.to === '/'} onClick={onClose} className={linkClass}>
-                  {item.label}
+            {items.map(({ to, label, icon: Icon }) => (
+              <li key={to}>
+                <NavLink to={to} end={to === '/'} onClick={onClose} className={linkClass}>
+                  {Icon && <Icon aria-hidden="true" className="size-5 shrink-0 opacity-70" />}
+                  {label}
                 </NavLink>
               </li>
             ))}
@@ -66,8 +68,14 @@ export default function MobileMenu({ open, onClose, items }) {
         </nav>
 
         <div className="flex flex-col gap-3">
-          <Button to="/contact" size="lg" onClick={onClose}>
-            Enquire about a course
+          <Button
+            to={actionNav.primary.to}
+            variant="whatsapp"
+            size="lg"
+            icon={actionNav.primary.icon}
+            onClick={onClose}
+          >
+            {actionNav.primary.label}
           </Button>
           <Button href={telHref(mainPhone)} variant="glass" size="lg" icon={Phone}>
             Call {mainPhone.display}

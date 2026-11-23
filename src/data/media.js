@@ -1,48 +1,48 @@
 /**
- * Photography used on the site.
+ * The two full-width photographs. Per-school subject photographs live on the schools
+ * themselves, in src/data/schools.js.
  *
- * PLACEHOLDERS — REPLACE BEFORE LAUNCH.
- * The images below are stock photographs from Unsplash standing in until Motech supplies
- * its own. They are not pictures of Motech, its premises or its students. A visitor
- * reasonably reads a photograph on an institute's website as being that institute, so
- * leaving stock imagery here at launch would misrepresent the school.
+ * All are Unsplash, free for commercial use, and self-hosted as WebP — the site makes no
+ * third-party image request. Sources are listed in docs/PHOTO-CREDITS.md.
  *
- * They are also loaded from Unsplash's servers rather than from this site, which adds a
- * third-party request on every page load. Replacing them with local files in /public/images
- * fixes that too. See that folder's README.
+ * `isPlaceholder` marks a photograph that stands in for one Motech should supply. Only the
+ * hero carries it: a visitor reads a photograph on an institute's website as being that
+ * institute, and that one shows a computer lab which is not Motech's. The skyline is simply
+ * the city the college is in, which is true either way.
  *
  * To swap one in:
  *   1. Put the file in /public/images with a descriptive name.
- *   2. Point `src` at '/images/<name>.jpg' and set `width`/`height` to its real pixel size,
- *      so the page does not jump while the image loads.
- *   3. Set `alt` as described below.
+ *   2. Point `src` at it and set `width`/`height` to its real pixel size, so the page does
+ *      not jump while it loads.
+ *   3. Set `alt` as described below, and clear `isPlaceholder`.
  */
 
 /**
- * Background of the homepage hero.
+ * Background of the homepage hero: a bright, full computer lab.
  *
- * `alt` is deliberately empty: the photograph sits behind the headline and adds no
- * information a screen reader user needs, so it is marked decorative. Give a real photo of
- * Motech a descriptive alt instead, for example 'Students at work in a Motech computer lab'.
+ * Still a stock photograph, and still not a picture of Motech — but it is of a *room of the
+ * kind Motech teaches in* rather than of identifiable individuals, and it is self-hosted
+ * rather than fetched from Unsplash on every page load. Replace it with Motech's own
+ * photograph of its own lab the moment one exists; see docs/CONTENT-TO-CONFIRM.md.
  *
- * Placeholder: unsplash.com/photos/woman-and-man-sitting-in-front-of-monitor-IgUR1iX0mqM
- * by @disruptxn, free under the Unsplash License.
+ * `alt` is deliberately empty: it sits behind the headline and adds nothing a screen-reader
+ * user needs. A real photograph of Motech deserves a descriptive alt instead, for example
+ * 'Students at work in a Motech computer lab'.
  */
 export const heroImage = {
-  src: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=2000&h=1125&q=70',
+  src: '/images/hero-computer-lab.webp',
   alt: '',
   width: 2000,
   height: 1125,
-  credit: 'Desola Lanre-Ologun',
   isPlaceholder: true,
 }
 
 /**
- * Nairobi skyline, behind the "A technical training institute in Nairobi" band.
- * Placeholder, by @bepnamanh on Unsplash. Decorative, so alt is empty at the point of use.
+ * The Nairobi skyline, behind the About and Student life title bands. The city the institute
+ * is in, so unlike the hero this one is simply true. Self-hosted; decorative at the point of
+ * use, so alt is empty there.
  */
 export const cityImage = {
-  src: 'https://images.unsplash.com/photo-1611348524140-53c9a25263d6?auto=format&fit=crop&w=2000&h=1000&q=70',
-  credit: 'Amani Nation',
-  isPlaceholder: true,
+  src: '/images/nairobi-skyline.webp',
+  isPlaceholder: false,
 }

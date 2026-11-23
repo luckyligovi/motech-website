@@ -1,7 +1,8 @@
 import { Mail, Phone } from 'lucide-react'
 import { siteConfig } from '../../config/site'
-import { mailtoHref, telHref } from '../../lib/contactLinks'
+import { mailtoHref, telHref, whatsappHref } from '../../lib/contactLinks'
 import Button from '../ui/Button'
+import WhatsAppIcon from '../ui/WhatsAppIcon'
 
 /**
  * The enquiry entry point, used wherever a visitor needs to reach the institute.
@@ -15,6 +16,8 @@ export default function EnquiryActions({ courseName, className = '' }) {
   const body = courseName
     ? `Hello Motech,\n\nI would like to know more about ${courseName} — entry requirements, fees, duration and the next intake.\n\nThank you.`
     : undefined
+  // Null when the institute has not marked a number for WhatsApp, so nothing is rendered.
+  const whatsapp = whatsappHref(body ?? 'Hello Motech, I would like to ask about a course.')
 
   return (
     <div className={`flex flex-wrap gap-3 ${className}`}>
@@ -28,6 +31,11 @@ export default function EnquiryActions({ courseName, className = '' }) {
           {phone.display}
         </Button>
       ))}
+      {whatsapp && (
+        <Button href={whatsapp} variant="outline" icon={WhatsAppIcon} iconClassName="text-whatsapp">
+          WhatsApp
+        </Button>
+      )}
       <Button href={mailtoHref({ subject, body })} variant="outline" icon={Mail}>
         Email us
       </Button>

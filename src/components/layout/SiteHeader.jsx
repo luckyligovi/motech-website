@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { NavLink } from 'react-router'
+import { Link, NavLink } from 'react-router'
 import { Menu } from 'lucide-react'
-import { primaryNav } from '../../data/navigation'
+import { actionNav, primaryNav } from '../../data/navigation'
 import Button from '../ui/Button'
 import Container from '../ui/Container'
 import Logo from '../shared/Logo'
@@ -18,7 +18,7 @@ export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-navy-950/95 supports-[backdrop-filter]:bg-navy-950/70 supports-[backdrop-filter]:backdrop-blur-xl">
+    <header className="glass sticky top-0 z-40 border-b border-white/10">
       <Container className="flex h-18 items-center justify-between gap-6">
         <Logo />
 
@@ -35,9 +35,17 @@ export default function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-3">
-          {/* On phones the bottom action bar already offers Enquire. */}
-          <div className="hidden lg:block">
-            <Button to="/contact">Enquire</Button>
+          {/* On phones the bottom action bar already carries both of these. */}
+          <div className="hidden items-center gap-4 lg:flex">
+            <Link
+              to={actionNav.secondary.to}
+              className="rounded-md px-1 py-2 text-sm font-semibold text-white/80 transition-colors hover:text-white"
+            >
+              {actionNav.secondary.label}
+            </Link>
+            <Button to={actionNav.primary.to} variant="whatsapp" icon={actionNav.primary.icon}>
+              {actionNav.primary.label}
+            </Button>
           </div>
           <button
             type="button"

@@ -1,5 +1,6 @@
 import { ArrowRight } from 'lucide-react'
-import { getFeaturedCourses } from '../../lib/courses'
+import { courses, getFeaturedCourses } from '../../lib/courses'
+import { schools } from '../../data/schools'
 import CourseCard from '../courses/CourseCard'
 import Button from '../ui/Button'
 import Reveal from '../ui/Reveal'
@@ -8,6 +9,7 @@ import SectionHeading from '../ui/SectionHeading'
 
 export default function CoursePreview() {
   const featured = getFeaturedCourses()
+  const allLabel = `All ${courses.length} courses`
 
   return (
     <Section aria-labelledby="courses-heading">
@@ -15,10 +17,10 @@ export default function CoursePreview() {
         <SectionHeading
           id="courses-heading"
           title="What you can study"
-          lead="One course from each subject area. Twelve run in total, from short certificates to two-year diplomas."
+          lead={`One course from each of six schools. ${courses.length} run in total across ${schools.length} schools, from two-week short courses to eighteen-month diplomas.`}
         />
         <Button to="/courses" variant="outline" icon={ArrowRight} className="hidden sm:inline-flex">
-          All twelve courses
+          {allLabel}
         </Button>
       </div>
 
@@ -31,7 +33,7 @@ export default function CoursePreview() {
       </ul>
 
       <Button to="/courses" variant="outline" icon={ArrowRight} className="mt-8 w-full sm:hidden">
-        All twelve courses
+        {allLabel}
       </Button>
     </Section>
   )

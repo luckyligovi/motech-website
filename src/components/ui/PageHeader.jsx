@@ -15,7 +15,7 @@ export default function PageHeader({ title, above, image, children }) {
           <img src={image.src} alt="" className="absolute inset-0 size-full object-cover" />
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/92 to-navy-950/70"
+            className="absolute inset-0 bg-navy-950/80 sm:bg-gradient-to-r sm:from-navy-950/96 sm:via-navy-950/85 sm:to-navy-950/55"
           />
         </>
       ) : (

@@ -1,35 +1,30 @@
-import { ClipboardList, Info } from 'lucide-react'
-import { admissionSteps } from '../data/admissions'
+import { Banknote, ClipboardList, Clock, Info } from 'lucide-react'
+import { siteConfig } from '../config/site'
+import { admissionSteps, requiredDocuments } from '../data/admissions'
+import { campusImages } from '../data/campus'
 import { faqs } from '../data/faqs'
 import EnquiryActions from '../components/shared/EnquiryActions'
 import FaqList from '../components/shared/FaqList'
 import StepList from '../components/shared/StepList'
 import Seo from '../components/shared/Seo'
+import Button from '../components/ui/Button'
+import PageHeader from '../components/ui/PageHeader'
 import Reveal from '../components/ui/Reveal'
 import Section from '../components/ui/Section'
 import SectionHeading from '../components/ui/SectionHeading'
-import PageHeader from '../components/ui/PageHeader'
+import WhatsAppIcon from '../components/ui/WhatsAppIcon'
 
 /**
  * How to join a course.
  *
- * The steps are general, not Motech's published procedure, because the institute has not
- * supplied one. The page is written so a visitor is always sent to the institute for the
- * specifics, rather than being given a figure or a rule this site cannot confirm.
- * See docs/CONTENT-TO-CONFIRM.md.
+ * The documents and the registration fee are the institute's published admission
+ * requirements, from its brochure (docs/BROCHURE-TRANSCRIPTION.md §5). How an application is
+ * actually submitted is not published, so the page sends the reader to the institute for
+ * that rather than inventing a procedure.
  */
 
-// Things a prospective student can usefully have to hand when they call. Generic and safe:
-// none of these claims a specific Motech requirement.
-const whatToPrepare = [
-  'The course, or courses, you are interested in.',
-  'Your most recent school results or certificates, so entry requirements can be checked.',
-  'Whether you would prefer to study in class, online, or a mix of the two.',
-  'Any questions about fees, dates or how the course is taught.',
-]
-
 // The admissions-related questions from the site's FAQ list.
-const admissionsFaqIds = ['entry-requirements', 'fees', 'intakes', 'apply']
+const admissionsFaqIds = ['entry-requirements', 'fees', 'payment', 'class-times', 'intakes', 'apply']
 const admissionsFaqs = faqs.filter((faq) => admissionsFaqIds.includes(faq.id))
 
 export default function Admissions() {
@@ -37,47 +32,57 @@ export default function Admissions() {
     <>
       <Seo path="/admissions" />
 
-      <PageHeader title="Admissions">
-        Joining a course at Motech starts with a conversation. Here is how it usually works, and
-        what to ask the institute along the way.
+      <PageHeader title="Admissions" image={{ src: campusImages[1].src }}>
+        Intake is ongoing. Here is what the institute asks for, what it costs to register, and
+        how to get started.
       </PageHeader>
 
       <Section aria-labelledby="steps-heading">
         <SectionHeading
           id="steps-heading"
           title="How to join a course"
-          lead="Four steps from choosing a course to starting it. The institute confirms its own requirements, fees and dates."
+          lead="Four steps from choosing a course to starting it. Confirm the current figures with the institute before you pay anything."
         />
         <Reveal className="mt-10">
           <StepList steps={admissionSteps} />
         </Reveal>
 
+        <Reveal className="mt-8 overflow-hidden rounded-xl">
+          <img
+            src={campusImages[0].src}
+            alt={campusImages[0].alt}
+            loading="lazy"
+            decoding="async"
+            className="h-56 w-full object-cover sm:h-72"
+          />
+        </Reveal>
+
         {/* Honest about the limit of what the site knows, without alarming the reader. */}
-        <div className="mt-8 flex gap-4 rounded-xl border border-line bg-white p-5 text-sm text-muted">
-          <Info aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-navy-800" />
+        <div className="mt-8 flex gap-4 rounded-xl border border-line glass-card p-5 text-sm text-muted">
+          <Info aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-accent" />
           <p>
-            Entry requirements, fees, intake dates and the application procedure are set by the
+            Entry requirements, durations and fees are listed on every course page, taken from
+            the institute&rsquo;s brochure. The application procedure itself is set by the
             institute and confirmed when you enquire. This website cannot take an application or
             save your details.
           </p>
         </div>
       </Section>
 
-      <Section className="bg-white">
+      <Section className="glass-soft border-y border-line">
         <div className="grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-6">
             <div className="flex items-center gap-3">
-              <span className="grid size-10 place-items-center rounded-lg bg-navy-950 text-accent">
+              <span className="grid size-10 place-items-center rounded-lg bg-accent/15 text-accent">
                 <ClipboardList aria-hidden="true" className="size-5" />
               </span>
-              <h2 className="text-2xl font-bold text-navy-950">Before you call</h2>
+              <h2 className="text-2xl font-bold text-head">What to bring</h2>
             </div>
             <p className="mt-4 text-muted">
-              You do not need anything to make an enquiry, but having these to hand makes the
-              conversation quicker.
+              The institute asks every applicant for these on admission.
             </p>
             <ul className="mt-6 flex flex-col gap-3">
-              {whatToPrepare.map((item) => (
+              {requiredDocuments.map((item) => (
                 <li key={item} className="flex gap-3">
                   <span
                     aria-hidden="true"
@@ -87,13 +92,79 @@ export default function Admissions() {
                 </li>
               ))}
             </ul>
+
+            <div className="mt-8 flex items-center gap-3">
+              <span className="grid size-10 place-items-center rounded-lg bg-accent/15 text-accent">
+                <Clock aria-hidden="true" className="size-5" />
+              </span>
+              <h2 className="text-2xl font-bold text-head">Class times</h2>
+            </div>
+            <dl className="mt-5 rounded-xl border border-line glass-soft px-5">
+              {siteConfig.classTimes.map(({ id, label, time }) => (
+                <div
+                  key={id}
+                  className="flex flex-wrap justify-between gap-2 border-b border-line py-3 last:border-b-0"
+                >
+                  <dt className="font-semibold text-head">{label}</dt>
+                  <dd className="text-muted">{time}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-3 text-sm text-muted">
+              Not every course runs in every session. Ask which applies to yours before you enrol.
+            </p>
           </div>
 
           <div className="lg:col-span-6">
-            <div className="rounded-xl border border-line bg-paper p-6">
-              <h2 className="text-xl font-bold text-navy-950">Enquire about admissions</h2>
+            <div className="rounded-xl border border-line glass-soft p-6">
+              <div className="flex items-center gap-3">
+                <span className="grid size-10 place-items-center rounded-lg bg-accent/15 text-accent">
+                  <Banknote aria-hidden="true" className="size-5" />
+                </span>
+                <h2 className="text-xl font-bold text-head">Registration and payment</h2>
+              </div>
+              <p className="mt-4 text-ink">
+                A registration fee of{' '}
+                <strong className="font-bold">
+                  KSh {siteConfig.registrationFee.amount.toLocaleString('en-KE')}
+                </strong>{' '}
+                is charged on top of course fees. It is {siteConfig.registrationFee.note}.
+              </p>
+              <dl className="mt-5 rounded-xl border border-line glass-card px-5">
+                <div className="flex flex-wrap justify-between gap-2 border-b border-line py-3">
+                  <dt className="font-semibold text-head">Method</dt>
+                  <dd className="text-muted">{siteConfig.payment.method}</dd>
+                </div>
+                <div className="flex flex-wrap justify-between gap-2 border-b border-line py-3">
+                  <dt className="font-semibold text-head">Paybill</dt>
+                  <dd className="font-mono text-ink tabular-nums">{siteConfig.payment.paybill}</dd>
+                </div>
+                <div className="flex flex-wrap justify-between gap-2 py-3">
+                  <dt className="font-semibold text-head">Account number</dt>
+                  <dd className="font-mono text-ink tabular-nums">{siteConfig.payment.account}</dd>
+                </div>
+              </dl>
+              <p className="mt-3 text-sm text-muted">
+                Confirm with the institute which fees go through the paybill, and get a receipt
+                for anything you pay.
+              </p>
+            </div>
+
+            <div className="mt-6 rounded-xl border border-line glass-soft p-6">
+              <h2 className="text-xl font-bold text-head">Apply on WhatsApp</h2>
               <p className="mt-2 text-sm text-muted">
-                Call or email the institute to go through entry requirements, fees and the next
+                Pick your course and level, and the application opens in WhatsApp already
+                written. Nothing is sent or stored by this website.
+              </p>
+              <Button to="/apply" size="lg" variant="whatsapp" icon={WhatsAppIcon} className="mt-5">
+                Start your application
+              </Button>
+            </div>
+
+            <div className="mt-6 rounded-xl border border-line glass-soft p-6">
+              <h2 className="text-xl font-bold text-head">Or ask first</h2>
+              <p className="mt-2 text-sm text-muted">
+                Call, message or email the institute to go through entry requirements and the next
                 intake for the course you want.
               </p>
               <EnquiryActions className="mt-5" />

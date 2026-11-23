@@ -1,6 +1,5 @@
 import { siteConfig } from '../config/site'
-import { courses } from '../data/courses'
-import { isCourseIndexable } from '../lib/courses'
+import { courseBlurb, courses, isCourseIndexable } from '../lib/courses'
 
 /**
  * Single source of per-route SEO metadata.
@@ -11,7 +10,7 @@ import { isCourseIndexable } from '../lib/courses'
  */
 
 const BASE_DESCRIPTION =
-  'Motech Technology Training Institute offers diploma and certificate programmes in ICT, business, accounting, health, hospitality and languages in Nairobi CBD.'
+  'Motech Technology Training Institute, Nairobi CBD: 86 courses across 14 schools in accountancy, business, ICT, hospitality, cosmetology, health, engineering and languages. Entry requirements, durations and fees listed. Intake ongoing.'
 
 // Static routes. Keep in step with src/routes.jsx.
 const staticMeta = {
@@ -19,30 +18,32 @@ const staticMeta = {
   '/about': {
     title: 'About us',
     description:
-      'Motech Technology Training Institute is a technical and vocational training college in Nairobi CBD, offering diploma and certificate courses across six subject areas.',
+      'Motech Technology Training Institute is a TVETA-registered technical and vocational college on Tom Mboya Street, Nairobi CBD, teaching 86 courses across 14 schools. Its vision, mission, values and facilities.',
   },
   '/courses': {
     title: 'Courses',
     description:
-      'Diploma and certificate courses at Motech Technology Training Institute in Nairobi: ICT, business, accounting, health and nutrition, hospitality and languages.',
+      '86 courses at Motech Technology Training Institute, Nairobi, across 14 schools, with entry requirements, duration, examining body and fees listed for every level.',
   },
   '/admissions': {
     title: 'Admissions',
     description:
-      'How to join a course at Motech Technology Training Institute in Nairobi: find a course, enquire about entry requirements and fees, apply, and start.',
+      'How to join Motech Technology Training Institute, Nairobi: admission requirements, the documents to bring, the KSh 1,000 registration fee, payment details and class times. Intake ongoing.',
+  },
+  '/apply': {
+    title: 'Apply',
+    description:
+      'Apply for a course at Motech Technology Training Institute over WhatsApp. Choose your course and level, and the application opens in WhatsApp ready to send. Intake ongoing.',
   },
   '/student-life': {
     title: 'Student life',
     description:
-      'Studying at Motech Technology Training Institute in central Nairobi: a city-centre college with in-person and online classes.',
-    // Thin until the institute supplies clubs, activities and facilities content. Flip this
-    // to false (or remove it) once there is real student-life content to index.
-    noindex: true,
+      'Student life at Motech Technology Training Institute, Nairobi: hostels, free WiFi, a prayer room, organised religious groups, industrial attachment and three daily class sessions.',
   },
   '/contact': {
     title: 'Contact',
     description:
-      'Call, email or visit Motech Technology Training Institute on Tom Mboya Street, Nairobi CBD, to ask about courses, fees, entry requirements and intakes.',
+      'Call, WhatsApp, email or visit Motech Technology Training Institute on the 8th floor of Mwalimu Co-op House, Tom Mboya Street, Nairobi CBD. Class times and contact details.',
   },
 }
 
@@ -63,7 +64,13 @@ export function metaForPath(path) {
     if (course) {
       return {
         title: buildTitle(course.name),
-        description: `${course.name} at Motech Technology Training Institute, Nairobi. ${course.summary}`,
+        description: [
+          `${course.name} at Motech Technology Training Institute, Nairobi.`,
+          courseBlurb(course),
+          [course.levelLabel, course.durationLabel, course.feeLabel].filter(Boolean).join(' · '),
+        ]
+          .filter(Boolean)
+          .join(' '),
         path: `/courses/${course.slug}`,
         noindex: !isCourseIndexable(course),
         canonical: canonicalFor(`/courses/${course.slug}`),

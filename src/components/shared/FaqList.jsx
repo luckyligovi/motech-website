@@ -16,7 +16,7 @@ export default function FaqList({ items }) {
           {/* The question is a heading so it can be navigated to, inside the summary so the
               browser still provides the disclosure behaviour. */}
           <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-left [&::-webkit-details-marker]:hidden">
-            <h3 className="text-lg font-semibold text-navy-950">{question}</h3>
+            <h3 className="text-lg font-semibold text-head">{question}</h3>
             <ChevronDown
               aria-hidden="true"
               className="size-5 shrink-0 text-muted transition-transform group-open:rotate-180"
@@ -32,7 +32,7 @@ export default function FaqList({ items }) {
             {link && (
               <Link
                 to={link.to}
-                className="mt-3 inline-block rounded font-semibold text-navy-800 underline-offset-4 hover:underline"
+                className="mt-3 inline-block rounded font-semibold text-accent underline-offset-4 hover:underline"
               >
                 {link.label}
               </Link>

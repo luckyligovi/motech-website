@@ -6,7 +6,9 @@ const baseClasses =
 const variantClasses = {
   primary: 'bg-accent text-navy-950 hover:bg-accent-600',
   glass: 'glass text-white hover:bg-white/15',
-  outline: 'border border-navy-800/25 text-navy-800 hover:bg-navy-800/5',
+  outline: 'border border-white/25 text-accent hover:bg-white/10',
+  // Brand green, with dark text: white on this green is 2.0:1 and fails outright.
+  whatsapp: 'bg-whatsapp text-whatsapp-ink hover:bg-whatsapp-700',
 }
 
 const sizeClasses = {
@@ -21,6 +23,9 @@ const isExternal = (href) => /^https?:\/\//.test(href)
  *  - `to`   internal route (router link)
  *  - `href` external site, phone or email link
  *  - neither: a real <button>
+ *
+ * The icon inherits the button's text colour unless `iconClassName` says otherwise, which is
+ * how a brand mark keeps its own colour on a button that is not that brand's colour.
  */
 export default function Button({
   to,
@@ -28,6 +33,7 @@ export default function Button({
   variant = 'primary',
   size = 'md',
   icon: Icon,
+  iconClassName = '',
   className = '',
   children,
   ...rest
@@ -36,7 +42,7 @@ export default function Button({
   const content = (
     <>
       {children}
-      {Icon && <Icon aria-hidden="true" className="size-4 shrink-0" />}
+      {Icon && <Icon aria-hidden="true" className={`size-4 shrink-0 ${iconClassName}`} />}
     </>
   )
 

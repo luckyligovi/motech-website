@@ -1,45 +1,24 @@
-import { useMemo, useState } from 'react'
-import { courses } from '../data/courses'
-import { getCategoryBySlug } from '../lib/courses'
-
-const normalise = (value) => value.toLowerCase().trim()
+import { useMemo } from 'react'
+import { courses } from '../lib/courses'
 
 /**
- * Search and category filtering for the catalogue.
+ * Narrows the catalogue by search term and school.
  *
- * Derived values are computed during render rather than mirrored into state, so the list
- * cannot fall out of step with the query. `query` and `categorySlug` are the only state.
+ * Pure: it holds no state and owns no URL. The page decides where `query` and `schoolSlug`
+ * come from — typing, the address bar, a link from the homepage — and this only filters, so
+ * the rule for what matches lives in one place.
+ *
+ * Matching runs against each course's prebuilt `search` string (see src/lib/courses.js),
+ * which folds in the course name, the brochure's own wording for it, the school, the levels,
+ * the entry requirements and anything the course covers. A student searching the words
+ * printed on paper therefore finds the course under the name the site publishes it as.
  */
-export default function useCourseFilter(initialCategory = 'all') {
-  const [query, setQuery] = useState('')
-  const [categorySlug, setCategorySlug] = useState(initialCategory)
-
-  const results = useMemo(() => {
-    const term = normalise(query)
-
+export default function useCourseFilter({ query = '', schoolSlug = 'all' } = {}) {
+  return useMemo(() => {
+    const term = query.toLowerCase().trim()
     return courses.filter((course) => {
-      if (categorySlug !== 'all' && course.category !== categorySlug) return false
-      if (!term) return true
-
-      const haystack = [
-        course.name,
-        course.summary,
-        course.level ?? '',
-        getCategoryBySlug(course.category)?.name ?? '',
-      ]
-        .join(' ')
-        .toLowerCase()
-
-      return haystack.includes(term)
+      if (schoolSlug !== 'all' && course.school.slug !== schoolSlug) return false
+      return !term || course.search.includes(term)
     })
-  }, [query, categorySlug])
-
-  const isFiltered = query.trim() !== '' || categorySlug !== 'all'
-
-  const reset = () => {
-    setQuery('')
-    setCategorySlug('all')
-  }
-
-  return { query, setQuery, categorySlug, setCategorySlug, results, isFiltered, reset }
+  }, [query, schoolSlug])
 }

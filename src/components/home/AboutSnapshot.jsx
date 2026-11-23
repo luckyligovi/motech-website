@@ -1,31 +1,30 @@
 import { Check } from 'lucide-react'
 import { cityImage } from '../../data/media'
+import { whyMotech } from '../../data/institute'
+import { courses } from '../../lib/courses'
+import { schools } from '../../data/schools'
 import Container from '../ui/Container'
 import GlassPanel from '../ui/GlassPanel'
 
 /**
- * What the institute is, and what this website can and cannot answer.
+ * What the institute is, and why it says a student should choose it.
  *
- * The second half replaces the usual "why choose us" selling points. Motech has not
- * supplied achievements, graduate outcomes or partnerships, and inventing them would
- * misrepresent the school, so the section sets expectations honestly instead.
+ * The panel shows the first few of the brochure's own "Why Motech" points; the About page
+ * carries all nine. They are the institute's claims, in the institute's words — nothing here
+ * is a selling point this site invented.
  */
-const siteAnswers = [
-  'What each course covers, the level it leads to and how long it runs.',
-  'Which courses are taught in class, online, or as a mix of the two.',
-  'How to reach the institute about fees, entry requirements and intake dates.',
-]
+const highlights = whyMotech.slice(0, 4)
 
 export default function AboutSnapshot() {
   return (
     <section
       aria-labelledby="about-heading"
-      className="relative overflow-hidden bg-navy-950 py-16 text-white sm:py-20"
+      className="relative overflow-hidden border-y border-line bg-navy-950 py-16 text-white sm:py-20"
     >
       <img src={cityImage.src} alt="" className="absolute inset-0 size-full object-cover" />
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-br from-navy-950 via-navy-950/95 to-navy-950/80"
+        className="absolute inset-0 bg-navy-950/82 lg:bg-gradient-to-br lg:from-navy-950/96 lg:via-navy-950/88 lg:to-navy-950/62"
       />
       <Container className="relative grid gap-12 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-7">
@@ -42,25 +41,26 @@ export default function AboutSnapshot() {
               matatu and bus routes.
             </p>
             <p>
-              It teaches twelve diploma and certificate courses across six subject areas, taught
-              in class, online, or a combination of the two, so the timetable can fit around work.
+              It teaches {courses.length} courses across {schools.length} schools, from two-week
+              short courses to eighteen-month diplomas, in class or online. Classes run early
+              morning, full time and evening, so the timetable can fit around work.
             </p>
           </div>
         </div>
 
         <GlassPanel as="div" className="p-6 sm:p-8 lg:col-span-5">
-          <h3 className="text-xl font-bold">What this site can tell you</h3>
+          <h3 className="text-xl font-bold">Why Motech</h3>
           <ul className="mt-5 flex flex-col gap-4">
-            {siteAnswers.map((item) => (
-              <li key={item} className="flex gap-3">
+            {highlights.map(({ text }) => (
+              <li key={text} className="flex gap-3">
                 <Check aria-hidden="true" className="mt-1 size-4 shrink-0 text-accent" />
-                <span className="text-white/85">{item}</span>
+                <span className="text-white/85">{text}</span>
               </li>
             ))}
           </ul>
           <p className="mt-6 border-t border-white/15 pt-5 text-sm text-white/70">
-            Fees, entry requirements and intake dates are confirmed by the institute directly,
-            so this site points you to them rather than publishing figures it cannot stand behind.
+            Entry requirements, durations and fees are listed for every course, as the
+            institute&rsquo;s brochure prints them. Confirm the current figures before you enrol.
           </p>
         </GlassPanel>
       </Container>

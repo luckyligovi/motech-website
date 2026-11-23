@@ -1,31 +1,45 @@
+import { siteConfig } from '../config/site'
+
 /**
  * The admissions process.
  *
- * GENERAL STEPS, NOT MOTECH'S PUBLISHED PROCEDURE. The institute has not supplied its
- * admissions process, so these describe how enrolling at a college usually works and send
- * the reader to the institute for the specifics. Replace them with the real procedure once
- * Motech confirms it — including documents required, how fees are paid and intake dates.
- * See docs/CONTENT-TO-CONFIRM.md.
+ * Steps 2 and 3 are the institute's published admission requirements, from the brochure
+ * (docs/BROCHURE-TRANSCRIPTION.md §5). Steps 1 and 4 describe how to use what the brochure
+ * publishes; neither invents a rule. The brochure does not say how an application is
+ * submitted or where the registration fee is paid, so the page asks the reader to confirm
+ * that rather than assuming the paybill covers it.
  */
+const { amount } = siteConfig.registrationFee
+const fee = `KSh ${amount.toLocaleString('en-KE')}`
+
 export const admissionSteps = [
   {
-    title: 'Find a course',
+    title: 'Choose your course',
     description:
-      'Browse the six subject areas and read what each course covers, how long it runs and how it is taught.',
+      'Each course page lists the entry requirement, duration and fee for every level it is offered at. Check that your grades meet the level you want.',
   },
   {
-    title: 'Enquire',
+    title: 'Get your documents together',
     description:
-      'Call or email the institute to go through entry requirements, fees and the dates of the next intake.',
+      'A copy of your national ID, two coloured passport-size photographs, and a copy of your KCPE or KCSE results.',
   },
   {
-    title: 'Apply',
-    description:
-      'Motech will tell you how to apply and which documents to bring. Ask what the application itself costs, if anything.',
+    title: 'Pay the registration fee',
+    description: `${fee}, non-refundable, charged once every calendar year on top of course fees. Ask the institute how to pay it.`,
   },
   {
-    title: 'Start your course',
+    title: 'Pick your class time and start',
     description:
-      'Confirm your start date, class times and whether you will be studying in class, online or both.',
+      'Classes run early morning, full time and evening, and intake is ongoing. Confirm your start date when you enrol.',
   },
 ]
+
+/** Exactly what the brochure asks an applicant to bring, in its own words. */
+export const requiredDocuments = [
+  'A copy of your national ID',
+  'Two coloured passport-size photographs, on admission',
+  'A copy of your KCPE or KCSE results',
+]
+
+/** The same documents, phrased for an applicant's own message. See src/lib/application.js. */
+export const requiredDocumentsShort = ['ID copy', 'two passport photos', 'KCPE/KCSE results']

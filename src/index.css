@@ -2,20 +2,41 @@
 
 /*
   Design tokens (Tailwind v4, CSS-first).
-  Palette comes from the project brief; --color-muted is slightly darker than the
-  suggested #64748B so small text keeps at least 4.5:1 contrast on --color-paper.
+
+  The site is dark and glass-surfaced. That is not a coat of paint over a light theme: glass
+  only reads as glass when there is something behind it to blur, so the page sits on a deep
+  navy base with colour washes and photography, and every card is a translucent pane over it.
+  A white card on a pale background with a backdrop-filter looks like a white card.
+
+  Colours are therefore named by role, not by lightness — `ink` is the body text colour, not
+  "something dark" — so a surface can change without every component changing with it.
 */
 @theme {
   --font-sans: "Manrope Variable", ui-sans-serif, system-ui, sans-serif;
 
-  --color-navy-950: #071b33;
-  --color-navy-800: #102a43;
+  /* Depths. `paper` is the page base that every glass pane sits over. */
+  --color-paper: #061325;
+  --color-navy-950: #040e1c;
+  --color-navy-900: #071b33;
+  --color-navy-800: #0f2742;
+
   --color-accent: #38bdf8;
   --color-accent-600: #0ea5e9;
-  --color-paper: #f5f8fc;
-  --color-ink: #25364a;
-  --color-muted: #5b6b80;
-  --color-line: #dce4ee;
+
+  /* WhatsApp brand green, for the mark and the buttons that open it. Text on it must be
+     dark: white on this green is 2.0:1, nowhere near legible. */
+  --color-whatsapp: #25d366;
+  --color-whatsapp-700: #1dab52;
+  --color-whatsapp-ink: #04231a;
+
+  /* Text. `head` for headings, `ink` for body, `muted` for secondary.
+     On the glass surfaces below: head 15.8:1, ink 13.4:1, muted 7.2:1. */
+  --color-head: #ffffff;
+  --color-ink: #e4ecf7;
+  --color-muted: #9cb0c9;
+
+  /* Hairlines, which on glass are light rather than dark. */
+  --color-line: rgb(255 255 255 / 0.12);
 
   --animate-rise: rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
 
@@ -34,6 +55,9 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Renders native controls — select menus, scrollbars, date pickers — dark. Without
+       it a dropdown opens as white-on-white over a dark page. */
+    color-scheme: dark;
   }
 
   /* Stop the page scrolling behind the open mobile menu (native <dialog>). */
@@ -42,8 +66,15 @@
   }
 
   body {
-    /* Navy behind the sticky header and footer; each page's <main> supplies the paper background. */
-    @apply bg-navy-950 font-sans text-ink antialiased;
+    /* The page backdrop is a fixed layer behind everything; this is what shows through it. */
+    @apply bg-paper font-sans text-ink antialiased;
+  }
+
+  /* Headings default to the brightest step, so a component rarely has to say so. */
+  h1,
+  h2,
+  h3 {
+    color: var(--color-head);
   }
 
   :focus-visible {
@@ -59,19 +90,64 @@
 }
 
 /*
-  Glass surface for use on dark backgrounds.
-  Text on it must stay light; the tint is dark enough to keep contrast over the amber block.
-  Falls back to a solid navy where backdrop-filter is unsupported.
+  The glass surfaces, in three weights.
+
+  Only `glass` carries a backdrop-filter, and that is deliberate. A blur reveals what is
+  behind it; blurring a smooth gradient returns the same smooth gradient at the cost of a
+  compositing layer. So the heavy weight is reserved for the panes that genuinely sit over
+  detail — the sticky header and action bar, which content scrolls beneath, and panels laid
+  over photography — while ordinary cards get the tint, the light edge and the transparency
+  without paying for a blur nobody can see. On the About page that is the difference between
+  forty blurred layers and five.
+
+  If a section ever gains a photographic background, its cards should move to `glass`.
+
+    glass        over photography or scrolling content: blurred, and darker, because a
+                 photograph can be any colour
+    glass-card   the default surface: cards, tables, panels
+    glass-soft   a panel nested in another, or a full-width band, where the default would
+                 stack into something muddy
+
+  The inset highlight along the top edge is what makes a pane read as a sheet of something
+  rather than a flat rectangle: it is the light catching the edge. None of them draw their
+  own border — pair with `border border-line`, so a caller can leave the edge off.
 */
 @utility glass {
-  background-color: rgb(7 27 51 / 0.62);
-  border: 1px solid rgb(255 255 255 / 0.16);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  backdrop-filter: blur(18px) saturate(140%);
+  background-color: rgb(4 14 28 / 0.58);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  backdrop-filter: blur(18px) saturate(135%);
 
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    background-color: rgb(16 42 67 / 0.96);
+    background-color: rgb(7 27 51 / 0.95);
   }
+}
+
+@utility glass-card {
+  background-color: rgb(255 255 255 / 0.06);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.07);
+}
+
+@utility glass-soft {
+  background-color: rgb(255 255 255 / 0.035);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
+}
+
+/*
+  The backdrop every pane is blurring: a deep navy wash with three slow colour fields in it.
+  Fixed, so the colour stays put while content scrolls over it, and `pointer-events: none`
+  so it never swallows a click.
+*/
+@utility page-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60rem 40rem at 12% -8%, rgb(56 189 248 / 0.16), transparent 60%),
+    radial-gradient(48rem 36rem at 92% 12%, rgb(129 90 240 / 0.14), transparent 62%),
+    radial-gradient(52rem 42rem at 70% 96%, rgb(14 165 233 / 0.12), transparent 60%),
+    linear-gradient(180deg, #061325 0%, #040e1c 55%, #061325 100%);
 }
 
 /* Faint technical grid used behind the hero. Purely decorative. */
@@ -99,6 +175,10 @@
   animation: var(--animate-rise);
   animation-delay: 380ms;
 }
+@utility rise-5 {
+  animation: var(--animate-rise);
+  animation-delay: 500ms;
+}
 
 /* Rows of a list, arriving in sequence after the panel they sit in. Set --row per item. */
 @utility rise-row {
@@ -106,12 +186,202 @@
   animation-delay: calc(360ms + var(--row, 0) * 55ms);
 }
 
+/*
+  A live indicator: a filled dot with a ring breathing out of it, for the intake badge.
+  The ring is a pseudo-element so the dot itself stays a crisp, solid shape.
+*/
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.65;
+  }
+  70%,
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+@utility pulse-dot {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background-color: currentColor;
+    animation: pulse-ring 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+/*
+  A slow, barely-there drift for the coloured wash behind the hero panel. Long enough and
+  faint enough that it reads as depth rather than as movement; anything quicker competes with
+  the headline for attention.
+*/
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate3d(2%, -3%, 0) scale(1.08);
+    opacity: 0.75;
+  }
+}
+
+@utility drift-slow {
+  animation: drift 18s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .rise-1,
   .rise-2,
   .rise-3,
   .rise-4,
-  .rise-row {
+  .rise-5,
+  .rise-row,
+  .drift-slow {
     animation: none;
   }
+
+  .pulse-dot::after {
+    animation: none;
+  }
+}
+
+/*
+  Responsive data tables.
+
+  Below 40rem a six-column table cannot fit a phone, and sideways scrolling is a poor way to
+  read a fee list. Rather than ship a second mobile component to keep in step, the same table
+  markup restacks: each course becomes a block headed by its name, and each cell becomes a
+  label-and-value row. The label comes from the cell's own `data-label`, so the heading text
+  is written once in the component and reused here.
+
+  `rowspan` is simply ignored once the cells are blocks, which is exactly what is wanted: the
+  spanned course-name heading falls into place above the level rows it covers.
+
+  Requires: one <tbody> per group, and a data-label on every <td>.
+*/
+@layer components {
+  @media (width < 40rem) {
+    .table-stack thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .table-stack tbody {
+      display: block;
+      border-top: 1px solid var(--color-line);
+    }
+
+    .table-stack tbody:first-of-type {
+      border-top: 0;
+    }
+
+    .table-stack tr {
+      display: block;
+      padding: 0.25rem 0 0.75rem;
+    }
+
+    /* A second or later level of the same course: separated, but clearly still part of it. */
+    .table-stack tr + tr {
+      border-top: 1px dashed var(--color-line);
+      padding-top: 0.75rem;
+    }
+
+    /* A row or row-group heading becomes the block's own heading. */
+    .table-stack tbody th {
+      display: block;
+      padding-bottom: 0.25rem;
+      font-size: 1rem;
+    }
+
+    .table-stack td {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-block: 0.3rem;
+      text-align: left;
+    }
+
+    .table-stack td::before {
+      content: attr(data-label);
+      flex-shrink: 0;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+    }
+
+    /* The Apply cell has no label worth printing; let the link take the full width. */
+    .table-stack td[data-label=""]::before {
+      content: none;
+    }
+
+    .table-stack td[data-label=""] {
+      justify-content: flex-end;
+      padding-top: 0.5rem;
+    }
+  }
+}
+
+/*
+  Some people turn transparency down at the operating system level — because blur makes text
+  harder to read, or because moving colour behind it is uncomfortable. Honour that: the panes
+  become solid, and the backdrop loses its colour fields. The layout does not change.
+*/
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: rgb(7 27 51 / 0.97);
+  }
+
+  .glass-card {
+    background-color: #142031;
+  }
+
+  .glass-soft {
+    background-color: #0d1a2c;
+  }
+
+  .page-backdrop {
+    background: #061325;
+  }
+}
+
+/*
+  A row that scrolls sideways on a phone: the school filter, the hero's school pages.
+
+  Two things make these usable on touch. Snap points, so a flick lands on a chip rather than
+  halfway across one. And a fade at the trailing edge, which is the only honest signal that
+  there is more to the right — a scrollbar does not appear on touch until you are already
+  scrolling, by which point you knew.
+*/
+@utility scroll-row {
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  & > * {
+    scroll-snap-align: start;
+  }
+}
+
+@utility fade-trailing {
+  mask-image: linear-gradient(to right, black calc(100% - 2.5rem), transparent);
 }

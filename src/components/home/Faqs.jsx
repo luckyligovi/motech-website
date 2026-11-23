@@ -18,7 +18,7 @@ export default function Faqs() {
           Still have a question?{' '}
           <Link
             to="/contact"
-            className="rounded font-semibold text-navy-800 underline-offset-4 hover:underline"
+            className="rounded font-semibold text-accent underline-offset-4 hover:underline"
           >
             Get in touch with the institute
           </Link>

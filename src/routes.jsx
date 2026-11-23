@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router'
 import Layout from './components/layout/Layout'
 import About from './pages/About'
 import Admissions from './pages/Admissions'
+import Apply from './pages/Apply'
 import Contact from './pages/Contact'
 import CourseDetail from './pages/CourseDetail'
 import Courses from './pages/Courses'
@@ -18,6 +19,7 @@ export default function AppRoutes() {
         <Route path="courses" element={<Courses />} />
         <Route path="courses/:slug" element={<CourseDetail />} />
         <Route path="admissions" element={<Admissions />} />
+        <Route path="apply" element={<Apply />} />
         <Route path="student-life" element={<StudentLife />} />
         <Route path="contact" element={<Contact />} />
         <Route path="*" element={<NotFound />} />
