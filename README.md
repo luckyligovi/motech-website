@@ -17,6 +17,15 @@ npm run build:spa  # client-only build, no prerender (rarely needed)
 `src/entry-server.jsx`, and `scripts/prerender.mjs`, which writes a static HTML file for every
 route (see "SEO and prerendering" below).
 
+## Documentation
+
+| File | What it holds |
+| --- | --- |
+| `docs/BROCHURE-TRANSCRIPTION.md` | The institute's printed brochure, transcribed cell by cell. The source of record for every course, fee and entry requirement on the site. |
+| `docs/CONTENT-TO-CONFIRM.md` | What the brochure does not settle, and what is still needed before launch. |
+| `docs/IMPROVEMENTS.md` | The improvement backlog, and the questions to put to the institute before building. |
+| `docs/PHOTO-CREDITS.md` | Attribution for the placeholder photography. |
+
 ## Stack
 
 React 19, Vite 8, JavaScript (no TypeScript), Tailwind CSS v4, Lucide icons, React Router 8.

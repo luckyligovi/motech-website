@@ -1,106 +1,96 @@
 # Content the institute must confirm
 
-Nothing in this list may be published as fact until Motech confirms it in writing.
-Sources so far: the Elimys directory listing and a photographed signboard in that listing's
-hero image. Neither is an official statement from the institute.
+**Most of this list is now resolved.** The institute supplied its printed brochure and
+confirmed it current on 19 November 2026. That document is a first-party published source, far
+stronger than the Elimys directory listing this site was first built from, and it supersedes
+the listing wherever the two disagree. It is transcribed cell by cell in
+`BROCHURE-TRANSCRIPTION.md`, which is now the source of record for everything on the site.
 
-## 1. Contact and identity
+What follows is only what the brochure does **not** settle. For things the institute could
+supply that would *add* to the site rather than correct it — news, photographs, financing,
+intake dates — see `IMPROVEMENTS.md`, which also carries a list of questions ready to put to
+them.
 
-| Item | Currently used | Status |
+## 1. Resolved by the brochure
+
+| Item | Now published | Source |
 | --- | --- | --- |
-| Institute name | Motech Technology Training Institute | Consistent across sources |
-| Address | Mwalimu Coop House, Tom Mboya Street, opposite Ambassador's Hotel, Nairobi CBD | Confirm. The signboard also says "8th floor" |
-| Phone (main) | +254 722 330 670 | Confirm |
-| Phone (second) | +254 758 223 130 | From the signboard only. Confirm |
-| Email | technologymotech@gmail.com | Confirm. A domain address would read as more credible |
-| Postal | P.O. Box 11518-00100, Nairobi | Confirm |
-| Motto | "Career Shaper" | Appears on the logo and listing. Confirm |
-| Year established | 2025 (per listing) | Confirm. Not yet used on the site |
-| WhatsApp | Not used | Confirm the number before any WhatsApp link is added |
-| Social media | None used | Supply official accounts, or we add none |
-| Opening hours | Not used | Supply if visitors should know them |
+| Address, including floor | Mwalimu Co-op House, 8th Floor, Tom Mboya Street | §1 |
+| Registration number | TVETA/PRI/TVC/0245/2025 | §1 |
+| Accreditation | TVETA, KASNEB, KNEC, NITA — named, logos not shown | §2 |
+| WhatsApp | 0758 223 130, marked by hand on the brochure | §1 |
+| Withdrawn number | 0758 982 859, struck through — removed from the site | §1 |
+| Year established | "more than 10 years ago" (confirmed verbally, 19 Nov 2026) | §2 |
+| Motto | The Career Shaper | §1 |
+| Vision, mission, core values | On /about, in the institute's own words | §3 |
+| Why choose Motech | Nine points, on /about and the homepage | §4 |
+| Admission requirements | KSh 1,000 registration fee, ID, 2 photos, KCPE/KCSE results | §5 |
+| Payment | I&M Bank Paybill 542542, A/C 32015 | §1 |
+| Class times | Three sessions, on /admissions, /contact and /student-life | §6 |
+| Course catalogue | 86 courses, 14 schools, with entry requirement, duration, examiner and fees per level | §7–§19 |
+| Student life | Hostels, prayer room, religious groups, free WiFi, industrial attachment | §4 |
 
-## 2. Accreditation and registration — do not publish without evidence
+The directory listing's claims that contradicted the brochure have been dropped: ICT is an
+18-month diploma, not five years; CPA and CIFA are not one three-month certificate; HR
+Management is an 18-month diploma, not six months; and the institute was not founded in 2025 —
+that is the year of its TVETA registration.
 
-The signboard reads "TVETA ACCREDITED" with registration number TVETA/PRI/TVC/0245/2025, and
-shows the logos of KASNEB, KISEB, JP International, NITA, ICM and ACCA. The same listing's
-information page records the registration number as "NA" and its licences page is empty.
+## 2. Still outstanding
 
-These two sources disagree, so the website currently makes **no** accreditation claim.
-Needed before any such claim is published:
+### Cells the brochure leaves unclear
+Tracked in §21 of the transcription. The site renders each as "Ask the institute when you
+enquire" rather than guessing, so none of them block anything:
 
-- The TVETA registration certificate, and the exact registered name and number.
-- Written confirmation of each examining body relationship, and what it covers.
-- Whether each body's logo may be displayed.
+1. ICT short courses — durations and fees for Advanced Excel, Digital Marketing and
+   Artificial Intelligence, where the printed cell borders are misaligned.
+2. Information Technology certificate — the duration cell is blank in the print.
+3. "Higher Diploma in Secretariat" — is this Secretarial Studies?
+4. "YCA" in the religious groups list.
+5. Whether fees printed under a bare "Fees" heading are per term, per year or in total. The
+   School of Business and School of Humanities tables give a figure with no period against it,
+   so the site shows "KSh 15,000" with no unit.
 
-## 3. Courses
+### Logos
+The brochure prints the KASNEB, KISEB, KNEC, NITA, ICM and ACCA marks. The site **names** the
+accrediting bodies and displays **no marks yet**: naming a body is a statement of fact, while
+reproducing its logo needs that body's permission.
 
-Twelve courses are listed online. Confirm for each: the official name, the qualification
-awarded, the level, the duration, the entry requirements, the fees and the examining body.
+The badge row is already built, for TVETA, KASNEB, KNEC and NITA, and falls back to the
+body's name in type while `logo` is null. Supply written permission from each body, then the
+mark from that body's own site, and see `public/images/accreditation/README.md`.
 
-| Course | Level (listed) | Duration (listed) | Examiner (listed) |
-| --- | --- | --- | --- |
-| ICT & Computer Studies | Diploma | 5 years | NITA, ICM, internal |
-| Business Management | Diploma | 2 years | KNEC, internal |
-| Human Resource Management | Diploma | 6 months | KNEC, internal |
-| Community Development and Social Work | Diploma | 2 years | NITA, KASNEB, internal |
-| CPA / CIFA | Certificate | 3 months | KASNEB, internal |
-| Accounting Technician Diploma | Certificate | 3 months | KASNEB, internal |
-| Certificate in Accounting and Management Skills | Certificate | 3 months | KASNEB, internal |
-| Business Data Analysis | Certificate | 3 months | KASNEB, internal |
-| Nutrition and Dietetics | Diploma | 2 years | KNEC and internal |
-| Health Care Assistant | Diploma | 6 months | JP International, NITA, KNEC |
-| Food and Beverage | Diploma | 2 years | KNEC, ICM, JP, NITA |
-| Languages | Certificate | 6 months | Internal |
+### Photographs — still the main launch blocker
+The homepage hero and the page banners are **stock photographs from Unsplash**, wired up in
+`src/data/media.js` and marked `isPlaceholder: true`. They are not pictures of Motech. A
+visitor reads a photograph on an institute's website as being that institute, so shipping them
+would misrepresent the school, and they load from Unsplash's servers rather than ours.
 
-Points that look wrong and need checking before publication:
+Course cards no longer carry photographs at all — they use the school's icon instead, which is
+honest and loads nothing third-party.
 
-- "Accounting Technician Diploma" is listed as a **certificate** lasting 3 months.
-- Human Resource Management and Health Care Assistant are listed as **diplomas** lasting 6 months.
-- ICT & Computer Studies is listed as a **5-year** diploma.
-- CPA and CIFA are two separate qualifications shown as one 3-month certificate.
-- Entry requirement is given only for Business Management: KCSE C-. Needed for every course.
-- Fees are "Contact Institution" everywhere, and the fee structure page is empty.
+Needed: photographs of the premises, classrooms and students that Motech owns and may publish,
+with recorded consent from anyone recognisable and from a parent or guardian for anyone under
+18. The brochure's own photographs are the right subject matter, but the files we have are
+phone shots of a folded printed page — low resolution, with glare and page curvature. Ask for
+the original digital files, or the brochure artwork.
 
-The signboard also advertises areas absent from the course list: Hotel & Tourism,
-Health & Social Sciences, KCSE / IGCSE / bridging, and engineering. Confirm whether these
-are offered before they appear anywhere on the site.
-
-## 4. Admissions
-
-- The listed intake runs Dec 2025 – Dec 2026, deadline 31 December 2026. Confirm.
-- Supply the real application steps, required documents and how to pay fees.
-- Confirm whether applications are accepted by phone, email or in person.
-
-## 5. Assets and content
-
-- ~~Official logo file.~~ **Supplied.** The institute's seal is in
-  `public/images/schoolLogo.jpeg` and wired up via `siteConfig.logoSrc`; the favicons are
-  generated from it. A vector (SVG) version would be sharper at small sizes if available.
-- Brand guidelines, if any exist.
-- **Photographs — currently a stock placeholder, must be replaced before launch.** The
-  homepage hero uses a stock photograph from Unsplash, wired up in `src/data/media.js` and
-  marked `isPlaceholder: true`. It is not a picture of Motech. A visitor reads a photograph
-  on an institute's website as being that institute, so shipping it would misrepresent the
-  school, and it is also loaded from Unsplash's servers rather than ours.
-
-  Needed: photographs of the premises, classrooms and students that Motech owns and may
-  publish, with recorded consent from anyone recognisable, and from a parent or guardian for
-  anyone under 18. Images from the directory listing are not used: we have no licence.
-- An approved description of the institute. The welcome note on the listing could be adapted.
+### Other
+- An email address on the institute's own domain would read as more credible than Gmail.
+- Official social media accounts, or we add none.
 - Testimonials, only if genuine, attributed and authorised.
-- **Student life content.** A `/student-life` page now exists, but holds only verified facts
-  (central location, study modes). Its "Clubs, activities and facilities" section defers to the
-  institute because none of that has been supplied — nothing there is invented. The page is set
-  `noindex` (in `src/seo/meta.js`) until real content is added; supply clubs, societies, sports,
-  activities, facilities or student stories (genuine and authorised) to flesh it out, then lift
-  the `noindex`.
+- A privacy policy, required under the Kenya Data Protection Act before any real enquiry form
+  is added. The site currently stores and sends nothing: every enquiry link opens the
+  visitor's own phone, WhatsApp or email app.
 
-## 6. Technical
+## 3. Technical
 
-- Preferred domain name and hosting. Until the domain is known, `siteConfig.url` stays null
-  and no canonical or Open Graph URL is emitted.
-- `siteConfig.indexable` is `false`, so every page currently asks search engines not to index
-  it. Set it to `true` only when the content is approved and the site is live on its domain.
-- Privacy policy and terms, if the site is to carry them. A real enquiry form would need a
-  privacy notice under the Kenya Data Protection Act.
+- **Domain and hosting.** Until the domain is known, `siteConfig.url` stays `null`, and no
+  canonical URL, Open Graph URL or sitemap entry is emitted. Set it and rebuild.
+- `siteConfig.indexable` is `true`. Every page is now offered to search engines, including all
+  86 course pages and /student-life, because every page carries confirmed content.
+
+## 4. Brochure corrections for the next print run
+
+Listed in §23 of the transcription. The website works around all of them; the paper does not.
+The one that matters most is **"TEVETA" where the registration number should read "TVETA"** —
+the institute's accreditation body, misspelt on its own brochure.
