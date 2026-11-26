@@ -29,12 +29,17 @@ export const siteConfig = {
    * The site's own address. Registered with HostAfrica on 26 November 2026 and pointed at
    * Cloudflare; see docs/DEPLOYMENT.md.
    *
+   * motechtraining.com, not motechinstitute.ac.ke: the .ac.ke registration is parked at
+   * HostAfrica pending a TVETA certificate KeNIC wants before it will activate (see
+   * docs/DEPLOYMENT.md). .com needed no verification, so it is the live domain for now; swap
+   * this value and nothing else if .ac.ke ever clears.
+   *
    * Everything canonical derives from this one value: the <link rel="canonical"> and og:url
    * on every page, and the absolute URLs in sitemap.xml and the Sitemap line of robots.txt,
    * all written by scripts/prerender.mjs at build time. Setting it back to null turns all of
    * them off rather than emitting a wrong address.
    */
-  url: 'https://motechinstitute.ac.ke',
+  url: 'https://motechtraining.com',
 
   // When false, every page asks search engines not to index it.
   indexable: true,

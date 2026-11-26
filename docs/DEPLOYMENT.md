@@ -4,12 +4,12 @@ The site is **static**: `npm run build` produces a folder of HTML, CSS, JavaScri
 images in `dist/`, with a real HTML file prerendered for every one of the 93 routes. There is
 no database and no server code, so it can be served by anything that serves files.
 
-The plan below costs **KSh 1,450 in the first year and KSh 2,350 a year after that** — the
-domain, and nothing else.
+The live domain is **motechtraining.com**. See "Domain history" below for why it is a `.com`
+and not the `.ac.ke` that was tried first.
 
 | | Where | Cost |
 | --- | --- | --- |
-| Domain `motechinstitute.ac.ke` | HostAfrica | KSh 1,450, then KSh 2,350/yr |
+| Domain `motechtraining.com` | HostAfrica | KSh 1,450, then KSh 2,990/yr |
 | DNS | Cloudflare | Free |
 | Hosting | Cloudflare Pages | Free |
 | HTTPS certificate | Cloudflare | Free, renews itself |
@@ -26,23 +26,38 @@ and allows 500 builds a month. The site is about 120 files against a 20,000 file
 Cloudflare also has edge locations in Kenya, so pages are served near the people reading
 them. `vercel.json` is inert on Cloudflare and can be deleted whenever.
 
+## Domain history
+
+`motechinstitute.ac.ke` was registered first, on 26 November 2026. `.ac.ke` is restricted to
+colleges and universities, and KeNIC will not activate the domain until it sees proof: the
+**TVETA certificate** (TVETA/PRI/TVC/0245/2025), or the college charter, or the founding Act
+of Parliament, with the institute's name on it. That document was not to hand, so the
+registration sits **parked and unused** rather than wasted — it is paid for a full year, it
+does not expire early, and it can be activated the moment the certificate turns up, by
+repeating the steps below with `motechinstitute.ac.ke` in place of `motechtraining.com`.
+
+`motechtraining.com` was registered instead, because a `.com` needs no verification document
+of any kind — it activates on payment alone. It cost more than a `.co.ke` would have
+(KSh 1,450 against KSh 199 to register, KSh 2,990 against KSh 2,350 a year after), but it
+avoided KeNIC's lighter `.co.ke` requirement too, which is a scan of the registrant's own ID.
+
+**If the TVETA certificate is ever found**, `.ac.ke` is the better domain for an accredited
+college to hold, and switching is cheap: repeat "Point the domain at Cloudflare" and "Connect
+the repository" for `motechinstitute.ac.ke`, then change the one line in
+`src/config/site.js` described below. Nothing else in the site changes.
+
 ## Steps
 
 ### 1. Register the domain — done
 
-`motechinstitute.ac.ke` was registered with HostAfrica on 26 November 2026, with auto-renew
-enabled and the transfer lock on. It renews 26 November 2027. `.ac.ke` is restricted to colleges and universities, so
-KeNIC asks for proof: send the **TVETA certificate** (TVETA/PRI/TVC/0245/2025), which names
-the institute and classifies it as a technical college. Allow a few days for the check.
-
-`.co.ke` is KSh 199 in the first year instead of KSh 1,450, and renews at the same
-KSh 2,350. The extra KSh 1,251 buys an extension only an accredited college can hold.
+`motechtraining.com` was registered with HostAfrica on 29 November 2026, with auto-renew
+enabled and the transfer lock on.
 
 ### 2. Point the domain at Cloudflare
 
-Create a free Cloudflare account, add `motechinstitute.ac.ke`, and Cloudflare gives two nameservers.
-Enter those at HostAfrica in place of the defaults. That is the only change made at
-HostAfrica.
+Create a free Cloudflare account, add `motechtraining.com`, and Cloudflare gives two
+nameservers. Enter those at HostAfrica in place of the defaults. That is the only change made
+at HostAfrica.
 
 DNS goes through Cloudflare rather than staying at HostAfrica because a root domain cannot
 normally point at a host with a CNAME record; Cloudflare resolves that automatically. It also
@@ -62,25 +77,26 @@ In Cloudflare Pages, create a project from the GitHub repository and set:
 Set `NODE_VERSION` explicitly. The build needs a current Node, and Cloudflare's default has
 moved before.
 
-Then add `motechinstitute.ac.ke` as a custom domain in the project. The certificate is issued
+Then add `motechtraining.com` as a custom domain in the project. The certificate is issued
 automatically.
 
 Every push to `main` now rebuilds and publishes on its own.
 
-### 4. Set the site's own address
+### 4. Set the site's own address — done
 
-Open `src/config/site.js` and set:
+`src/config/site.js` sets:
 
 ```js
-url: 'https://motechinstitute.ac.ke',
+url: 'https://motechtraining.com',
 ```
 
 Until this is set, `siteConfig.url` is `null` and the build deliberately emits **no canonical
 URLs, no Open Graph URLs, and an empty sitemap** — rather than guessing an address and
-publishing a wrong one. Setting it turns all three on; `scripts/prerender.mjs` writes
+publishing a wrong one. With it set, all three are on; `scripts/prerender.mjs` writes
 `sitemap.xml` and the `Sitemap:` line in `robots.txt` from that one value.
 
-Commit, push, and submit `https://motechinstitute.ac.ke/sitemap.xml` to Google Search Console.
+Once the domain resolves, submit `https://motechtraining.com/sitemap.xml` to Google Search
+Console.
 
 ## Caching
 
@@ -92,7 +108,7 @@ everything else.
 
 ## Adding email later
 
-The one thing this plan does not include is `admissions@motechinstitute.ac.ke`. To add it, buy
+The one thing this plan does not include is `admissions@motechtraining.com`. To add it, buy
 HostAfrica's Web Hosting Starter (KSh 210/mo promotional, KSh 420/mo normally) for the
 mailboxes alone, and paste its MX records into Cloudflare's DNS. **The website does not move
 and nothing about the deployment changes.**
