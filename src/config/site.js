@@ -25,8 +25,16 @@ export const siteConfig = {
    */
   registration: 'TVETA/PRI/TVC/0245/2025',
 
-  // Production domain is not decided yet. While null, no canonical or og:url is emitted.
-  url: null,
+  /**
+   * The site's own address. Registered with HostAfrica on 26 November 2026 and pointed at
+   * Cloudflare; see docs/DEPLOYMENT.md.
+   *
+   * Everything canonical derives from this one value: the <link rel="canonical"> and og:url
+   * on every page, and the absolute URLs in sitemap.xml and the Sitemap line of robots.txt,
+   * all written by scripts/prerender.mjs at build time. Setting it back to null turns all of
+   * them off rather than emitting a wrong address.
+   */
+  url: 'https://motechinstitute.ac.ke',
 
   // When false, every page asks search engines not to index it.
   indexable: true,

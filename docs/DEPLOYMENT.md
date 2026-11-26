@@ -9,7 +9,7 @@ domain, and nothing else.
 
 | | Where | Cost |
 | --- | --- | --- |
-| Domain `motech.ac.ke` | HostAfrica | KSh 1,450, then KSh 2,350/yr |
+| Domain `motechinstitute.ac.ke` | HostAfrica | KSh 1,450, then KSh 2,350/yr |
 | DNS | Cloudflare | Free |
 | Hosting | Cloudflare Pages | Free |
 | HTTPS certificate | Cloudflare | Free, renews itself |
@@ -28,9 +28,10 @@ them. `vercel.json` is inert on Cloudflare and can be deleted whenever.
 
 ## Steps
 
-### 1. Register the domain
+### 1. Register the domain — done
 
-Buy `motech.ac.ke` from HostAfrica. `.ac.ke` is restricted to colleges and universities, so
+`motechinstitute.ac.ke` was registered with HostAfrica on 26 November 2026, with auto-renew
+enabled and the transfer lock on. It renews 26 November 2027. `.ac.ke` is restricted to colleges and universities, so
 KeNIC asks for proof: send the **TVETA certificate** (TVETA/PRI/TVC/0245/2025), which names
 the institute and classifies it as a technical college. Allow a few days for the check.
 
@@ -39,7 +40,7 @@ KSh 2,350. The extra KSh 1,251 buys an extension only an accredited college can 
 
 ### 2. Point the domain at Cloudflare
 
-Create a free Cloudflare account, add `motech.ac.ke`, and Cloudflare gives two nameservers.
+Create a free Cloudflare account, add `motechinstitute.ac.ke`, and Cloudflare gives two nameservers.
 Enter those at HostAfrica in place of the defaults. That is the only change made at
 HostAfrica.
 
@@ -61,7 +62,7 @@ In Cloudflare Pages, create a project from the GitHub repository and set:
 Set `NODE_VERSION` explicitly. The build needs a current Node, and Cloudflare's default has
 moved before.
 
-Then add `motech.ac.ke` as a custom domain in the project. The certificate is issued
+Then add `motechinstitute.ac.ke` as a custom domain in the project. The certificate is issued
 automatically.
 
 Every push to `main` now rebuilds and publishes on its own.
@@ -71,7 +72,7 @@ Every push to `main` now rebuilds and publishes on its own.
 Open `src/config/site.js` and set:
 
 ```js
-url: 'https://motech.ac.ke',
+url: 'https://motechinstitute.ac.ke',
 ```
 
 Until this is set, `siteConfig.url` is `null` and the build deliberately emits **no canonical
@@ -79,7 +80,7 @@ URLs, no Open Graph URLs, and an empty sitemap** — rather than guessing an add
 publishing a wrong one. Setting it turns all three on; `scripts/prerender.mjs` writes
 `sitemap.xml` and the `Sitemap:` line in `robots.txt` from that one value.
 
-Commit, push, and submit `https://motech.ac.ke/sitemap.xml` to Google Search Console.
+Commit, push, and submit `https://motechinstitute.ac.ke/sitemap.xml` to Google Search Console.
 
 ## Caching
 
@@ -91,7 +92,7 @@ everything else.
 
 ## Adding email later
 
-The one thing this plan does not include is `admissions@motech.ac.ke`. To add it, buy
+The one thing this plan does not include is `admissions@motechinstitute.ac.ke`. To add it, buy
 HostAfrica's Web Hosting Starter (KSh 210/mo promotional, KSh 420/mo normally) for the
 mailboxes alone, and paste its MX records into Cloudflare's DNS. **The website does not move
 and nothing about the deployment changes.**
