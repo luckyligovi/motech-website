@@ -24,6 +24,7 @@ route (see "SEO and prerendering" below).
 | `docs/BROCHURE-TRANSCRIPTION.md` | The institute's printed brochure, transcribed cell by cell. The source of record for every course, fee and entry requirement on the site. |
 | `docs/CONTENT-TO-CONFIRM.md` | What the brochure does not settle, and what is still needed before launch. |
 | `docs/IMPROVEMENTS.md` | The improvement backlog, and the questions to put to the institute before building. |
+| `docs/DEPLOYMENT.md` | How the site is deployed, what it costs, and the one value to set at launch. |
 | `docs/PHOTO-CREDITS.md` | Attribution for the placeholder photography. |
 
 ## Stack

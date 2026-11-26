@@ -1,0 +1,27 @@
+# Cloudflare Pages reads this file at deploy time and applies the headers below.
+# It lives in /public so Vite copies it to the root of dist/ untouched.
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), interest-cohort=()
+
+# Vite fingerprints these filenames, so a changed file arrives under a new name and an old
+# one can never go stale. Cache them for a year and never revalidate.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Fonts are fingerprinted the same way.
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+# Photographs and logos keep their filenames across deploys — replacing one reuses its name —
+# so they cannot be cached immutably. A day in cache, then served stale while revalidating in
+# the background, which keeps repeat visits instant without pinning an old picture for a year.
+/images/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# The HTML itself must never be held: it is what points at everything else.
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
