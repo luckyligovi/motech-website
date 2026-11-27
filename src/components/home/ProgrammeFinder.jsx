@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { ArrowRight, Pause, Play, Search } from 'lucide-react'
 import { schools } from '../../data/schools'
@@ -13,24 +13,40 @@ import GlassPanel from '../ui/GlassPanel'
  * to /courses, which does the real filtering — this panel owns no search logic of its own.
  *
  * All fourteen schools are shown, rotating in pages, because eight static tiles hid six
- * schools from anyone who never scrolled to the catalogue. Pages rather than a continuously
- * sliding strip: a link that is still moving when you reach for it is a link you miss.
+ * schools from anyone who never scrolled to the catalogue. The three pages sit side by side
+ * in one horizontal track; turning a page slides the whole track, and on a touch screen a
+ * finger can drag it directly — a real swipe, not an instant swap.
  *
- * Every page is in the HTML, with the inactive ones hidden, so all fourteen links are there
- * for crawlers and none of them are reachable by keyboard while off-screen.
+ * A dragged swipe has to tell a genuine sideways gesture apart from an ordinary vertical
+ * scroll, since both start as a single finger touching this panel. The first several pixels
+ * of movement decide which axis the gesture is on; once it is vertical, the drag is released
+ * entirely so the page scrolls normally underneath it.
+ *
+ * Every page is in the HTML, with the inactive ones marked `inert` rather than removed —
+ * `inert` keeps a page out of the tab order and off the accessibility tree while still
+ * letting it sit, fully rendered, beside the active one on the track. All fourteen links
+ * still reach crawlers.
  *
  * Accessibility (WCAG 2.2.2, "Pause, Stop, Hide" — this moves on its own for more than five
  * seconds, so it must be stoppable):
  *   - A visible pause button.
  *   - Rotation stops on hover and on keyboard focus anywhere inside, and resumes on leaving.
  *   - It never starts on a touch screen, where there is no hover to pause it with and the
- *     thing moving would be the thing under your thumb.
- *   - No rotation at all for a visitor who prefers reduced motion; the dots still work.
+ *     thing moving would be the thing under your thumb — though a deliberate swipe there
+ *     still turns the page.
+ *   - No rotation at all for a visitor who prefers reduced motion; the dots and swipe still
+ *     work, just without the automatic timer.
  *
  * Counts come from the catalogue, so a tile can never advertise courses that are not there.
  */
 const ROTATE_MS = 6000
 const PAGE_COUNT = 3
+// A swipe has to cross this share of the panel's width to turn the page; short of it, the
+// track springs back. Short enough to feel responsive, long enough that a scroll which
+// barely strays sideways doesn't accidentally turn the page.
+const SWIPE_THRESHOLD = 0.18
+// Pixels of initial movement before the gesture commits to an axis.
+const AXIS_LOCK_PX = 8
 
 const countsBySchool = new Map(
   groupBySchool().map(({ school, courses: list }) => [school.slug, list.length]),
@@ -52,17 +68,60 @@ export default function ProgrammeFinder() {
   const [query, setQuery] = useState('')
   const [page, setPage] = useState(0)
   const [paused, setPaused] = useState(false)
+  // Pixels the track is currently offset by a finger in progress; 0 once released.
+  const [dragPx, setDragPx] = useState(0)
+  const [dragging, setDragging] = useState(false)
+
+  const trackRef = useRef(null)
+  const gesture = useRef({ x: 0, y: 0, axis: null })
+
+  const goTo = (index) => setPage(((index % pages.length) + pages.length) % pages.length)
 
   useEffect(() => {
-    if (paused || pages.length < 2) return
+    if (paused || dragging || pages.length < 2) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    // Nothing should move under a thumb. On touch there is no hover to pause with, so the
-    // rotation simply does not start; the dots and the pause button still work.
+    // Nothing should move under a thumb on its own. On touch there is no hover to pause with,
+    // so the automatic timer simply does not run; a swipe still turns the page deliberately.
     if (window.matchMedia('(hover: none)').matches) return
 
-    const id = setInterval(() => setPage((current) => (current + 1) % pages.length), ROTATE_MS)
+    const id = setInterval(() => goTo(page + 1), ROTATE_MS)
     return () => clearInterval(id)
-  }, [paused])
+  }, [paused, dragging, page])
+
+  const handleTouchStart = (event) => {
+    const touch = event.touches[0]
+    gesture.current = { x: touch.clientX, y: touch.clientY, axis: null }
+    setDragging(true)
+  }
+
+  const handleTouchMove = (event) => {
+    const touch = event.touches[0]
+    const dx = touch.clientX - gesture.current.x
+    const dy = touch.clientY - gesture.current.y
+
+    if (gesture.current.axis === null && Math.max(Math.abs(dx), Math.abs(dy)) > AXIS_LOCK_PX) {
+      gesture.current.axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y'
+    }
+
+    // A vertical gesture belongs to the page, not the carousel: stop tracking and let the
+    // browser scroll normally underneath. A horizontal one is claimed from here on, which
+    // keeps the page itself still while the track follows the finger.
+    if (gesture.current.axis === 'x') {
+      event.preventDefault()
+      setDragPx(dx)
+    }
+  }
+
+  const handleTouchEnd = () => {
+    if (gesture.current.axis === 'x') {
+      const width = trackRef.current?.offsetWidth || 1
+      if (dragPx < -width * SWIPE_THRESHOLD) goTo(page + 1)
+      else if (dragPx > width * SWIPE_THRESHOLD) goTo(page - 1)
+    }
+    setDragging(false)
+    setDragPx(0)
+    gesture.current.axis = null
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -107,6 +166,9 @@ export default function ProgrammeFinder() {
           page can turn under a keyboard user who has just tabbed onto one of these links and
           take the link out from under them. A <section> with a name carries role="region",
           which is what the carousel pattern wants, so no explicit role is needed.
+
+          overflow-hidden here is what turns "three full-width pages in a row" into "one page
+          visible at a time, sliding" — the track itself is always three panels wide.
         */}
         {/* oxlint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
         <section
@@ -116,71 +178,89 @@ export default function ProgrammeFinder() {
           onMouseLeave={() => setPaused(false)}
           onFocus={() => setPaused(true)}
           onBlur={() => setPaused(false)}
-          className="mt-5"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
+          className="mt-5 touch-pan-y overflow-hidden"
         >
-          {pages.map((group, pageIndex) => (
-            <ul
-              key={pageIndex}
-              hidden={pageIndex !== page}
-              aria-label={`Schools, page ${pageIndex + 1} of ${pages.length}`}
-              className="grid gap-2 sm:grid-cols-2 sm:gap-2.5"
-            >
-              {group.map(({ slug, name, icon: Icon, tint, image }, index) => {
-                const count = countsBySchool.get(slug) ?? 0
-                return (
-                  <li key={slug} className="min-w-0 rise-row" style={{ '--row': index }}>
-                    <Link
-                      to={`/courses#${slug}`}
-                      className="group flex h-full items-center gap-3 rounded-xl border border-white/12 p-2.5 transition-all hover:-translate-y-0.5 hover:border-accent/50 hover:bg-white/5 active:translate-y-0 sm:p-3"
-                    >
-                      {/* The subject photograph, under a wash of the school's colour so the
-                          icon stays legible and fourteen different photographs still read as
-                          one set. Decorative: the school is named right beside it. */}
-                      <span className="relative grid size-9 shrink-0 overflow-hidden rounded-lg sm:size-11">
-                        {image && (
-                          <img
-                            src={image}
-                            alt=""
-                            loading="lazy"
-                            decoding="async"
-                            className="size-full object-cover"
-                          />
-                        )}
-                        <span
+          <div
+            ref={trackRef}
+            className="flex"
+            style={{
+              transform: `translateX(calc(${-page * 100}% + ${dragPx}px))`,
+              transition: dragging ? 'none' : 'transform 400ms cubic-bezier(0.2, 0.7, 0.2, 1)',
+            }}
+          >
+            {pages.map((group, pageIndex) => (
+              <ul
+                key={pageIndex}
+                // `inert` (true, not an empty string — React treats that as false) rather than removing the page: it stays rendered — so it can sit
+                // beside the active page on the track and slide into view — but drops out of
+                // the tab order and the accessibility tree while it is off to the side.
+                {...(pageIndex !== page && { inert: true })}
+                aria-label={`Schools, page ${pageIndex + 1} of ${pages.length}`}
+                className="grid w-full shrink-0 gap-2 sm:grid-cols-2 sm:gap-2.5"
+              >
+                {group.map(({ slug, name, icon: Icon, tint, image }, index) => {
+                  const count = countsBySchool.get(slug) ?? 0
+                  return (
+                    <li key={slug} className="min-w-0 rise-row" style={{ '--row': index }}>
+                      <Link
+                        to={`/courses#${slug}`}
+                        draggable={false}
+                        className="group flex h-full items-center gap-3 rounded-xl border border-white/12 p-2.5 transition-all hover:-translate-y-0.5 hover:border-accent/50 hover:bg-white/5 active:translate-y-0 sm:p-3"
+                      >
+                        {/* The subject photograph, under a wash of the school's colour so the
+                            icon stays legible and fourteen different photographs still read
+                            as one set. Decorative: the school is named right beside it. */}
+                        <span className="relative grid size-9 shrink-0 overflow-hidden rounded-lg sm:size-11">
+                          {image && (
+                            <img
+                              src={image}
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                              draggable={false}
+                              className="size-full object-cover"
+                            />
+                          )}
+                          <span
+                            aria-hidden="true"
+                            className="absolute inset-0 grid place-items-center text-white"
+                            style={{
+                              background: image
+                                ? `color-mix(in oklab, ${tint} 70%, transparent)`
+                                : tint,
+                            }}
+                          >
+                            <Icon className="size-4.5" />
+                          </span>
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-sm font-semibold">{name}</span>
+                          <span className="block text-xs text-white/60">
+                            {count === 1 ? '1 course' : `${count} courses`}
+                          </span>
+                        </span>
+                        <ArrowRight
                           aria-hidden="true"
-                          className="absolute inset-0 grid place-items-center text-white"
-                          style={{
-                            background: image
-                              ? `color-mix(in oklab, ${tint} 70%, transparent)`
-                              : tint,
-                          }}
-                        >
-                          <Icon className="size-4.5" />
-                        </span>
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-sm font-semibold">{name}</span>
-                        <span className="block text-xs text-white/60">
-                          {count === 1 ? '1 course' : `${count} courses`}
-                        </span>
-                      </span>
-                      <ArrowRight
-                        aria-hidden="true"
-                        className="size-4 shrink-0 text-white/40 transition-transform group-hover:translate-x-0.5 group-hover:text-accent"
-                      />
-                    </Link>
-                  </li>
-                )
-              })}
+                          className="size-4 shrink-0 text-white/40 transition-transform group-hover:translate-x-0.5 group-hover:text-accent"
+                        />
+                      </Link>
+                    </li>
+                  )
+                })}
 
-              {/* Keeps every page the same height, so the panel never jumps as it turns. */}
-              {Array.from({ length: tallestPage - group.length }, (_, i) => (
-                <li key={`spacer-${i}`} aria-hidden="true" className="invisible p-3">
-                  <span className="block size-9" />
-                </li>
-              ))}
-            </ul>
-          ))}
+                {/* Keeps every page the same height, so the track never jumps as it turns. */}
+                {Array.from({ length: tallestPage - group.length }, (_, i) => (
+                  <li key={`spacer-${i}`} aria-hidden="true" className="invisible p-3">
+                    <span className="block size-9" />
+                  </li>
+                ))}
+              </ul>
+            ))}
+          </div>
         </section>
 
         {/* The visible bar is 6px; the button around it is 44, which is what a thumb needs. */}
@@ -189,7 +269,7 @@ export default function ProgrammeFinder() {
             <button
               key={pageIndex}
               type="button"
-              onClick={() => setPage(pageIndex)}
+              onClick={() => goTo(pageIndex)}
               aria-label={`Show schools ${pageIndex + 1} of ${pages.length}`}
               aria-current={pageIndex === page ? 'true' : undefined}
               className="group/dot grid h-11 w-9 place-items-center"
