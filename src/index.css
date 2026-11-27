@@ -65,6 +65,15 @@
     overflow: hidden;
   }
 
+  html,
+  body {
+    /* A phone has no room to spare: nothing on this site should ever be able to force a
+       sideways scrollbar or push content off the right edge of the screen. This is the
+       backstop — the actual fixes for anything that was causing it (see AccreditationBadges)
+       still matter, but this guarantees a stray px of overflow can never crop the page. */
+    overflow-x: hidden;
+  }
+
   body {
     /* The page backdrop is a fixed layer behind everything; this is what shows through it. */
     @apply bg-paper font-sans text-ink antialiased;

@@ -18,17 +18,19 @@ import { accreditationBadges } from '../../data/institute'
  * `eager` loads the marks immediately, for the homepage hero where they sit above the fold.
  * Everywhere else they stay lazy.
  */
-/* The logo tile: shorter on a phone, where four of these wrap to two rows. */
+/* The logo tile: shorter on a phone. Two per row below 640px — four packed this tight
+ * left "Examining body" no slack to wrap safely, which is what Cloudflare's deploy is
+ * fine with but a 360px phone is not — then four in a row from `sm` up. */
 const BOX_REM = 2.5
 const BOX_REM_SM = 1.75
 
 export default function AccreditationBadges({ eager = false, className = '' }) {
   return (
-    <ul className={`grid grid-cols-4 gap-2 sm:flex sm:flex-wrap sm:gap-2.5 ${className}`}>
+    <ul className={`grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-2.5 ${className}`}>
       {accreditationBadges.map(({ name, fullName, role, logo, logoScale = 1 }) => (
         <li
           key={name}
-          className="glass-card flex flex-col items-center justify-center gap-1.5 rounded-lg border border-line px-2 py-2 transition-all hover:-translate-y-0.5 hover:border-accent/40 sm:min-w-[7.5rem] sm:flex-1 sm:gap-2 sm:rounded-xl sm:px-4 sm:py-3"
+          className="glass-card flex min-w-0 flex-col items-center justify-center gap-1.5 rounded-lg border border-line px-2 py-2 transition-all hover:-translate-y-0.5 hover:border-accent/40 sm:min-w-[7.5rem] sm:flex-1 sm:gap-2 sm:rounded-xl sm:px-4 sm:py-3"
         >
           {/* The marks are drawn for light backgrounds — two of the four are supplied on a
               white rectangle — so each sits on its own white tile rather than on the glass. */}
