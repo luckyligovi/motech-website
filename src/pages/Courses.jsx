@@ -67,8 +67,8 @@ export default function Courses() {
       </PageHeader>
 
       <Section>
-        <div className="grid gap-x-10 gap-y-6 lg:grid-cols-12">
-          <div className="lg:col-span-3">
+        <div className="grid min-w-0 gap-x-10 gap-y-6 lg:grid-cols-12">
+          <div className="min-w-0 lg:col-span-3">
             {/* Sticky on every size, but it earns it most on a phone: the catalogue is long
                 and this keeps a one-tap route to any school within reach the whole way down. */}
             <div className="glass sticky top-18 z-20 -mx-4 border-b border-line px-4 py-2 sm:-mx-6 sm:px-6 lg:top-24 lg:mx-0 lg:border-0 lg:bg-transparent lg:px-0 lg:py-0 lg:backdrop-filter-none">
@@ -80,7 +80,7 @@ export default function Courses() {
             </div>
           </div>
 
-          <div className="lg:col-span-9">
+          <div className="min-w-0 lg:col-span-9">
             <CourseSearch query={query} onQueryChange={setTyped} resultCount={results.length} />
 
             {groups.length === 0 ? (
