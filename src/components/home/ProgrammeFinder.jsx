@@ -128,7 +128,7 @@ export default function ProgrammeFinder() {
               {group.map(({ slug, name, icon: Icon, tint, image }, index) => {
                 const count = countsBySchool.get(slug) ?? 0
                 return (
-                  <li key={slug} className="rise-row" style={{ '--row': index }}>
+                  <li key={slug} className="min-w-0 rise-row" style={{ '--row': index }}>
                     <Link
                       to={`/courses#${slug}`}
                       className="group flex h-full items-center gap-3 rounded-xl border border-white/12 p-2.5 transition-all hover:-translate-y-0.5 hover:border-accent/50 hover:bg-white/5 active:translate-y-0 sm:p-3"

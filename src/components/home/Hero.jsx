@@ -77,8 +77,8 @@ export default function Hero() {
       />
 
       <Container className="relative py-9 sm:py-14 lg:py-20">
-        <div className="grid gap-8 sm:gap-12 lg:grid-cols-12 lg:items-start lg:gap-10">
-          <div className="lg:col-span-7">
+        <div className="grid min-w-0 gap-8 sm:gap-12 lg:grid-cols-12 lg:items-start lg:gap-10">
+          <div className="min-w-0 lg:col-span-7">
             {intake.open && (
               <p className="rise-1 inline-flex items-center gap-2.5 rounded-full border border-accent/25 bg-accent/10 py-1.5 pr-4 pl-3 text-sm font-semibold text-accent">
                 <span aria-hidden="true" className="pulse-dot size-2 rounded-full bg-accent" />
@@ -122,7 +122,7 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="rise-3 lg:col-span-5">
+          <div className="min-w-0 rise-3 lg:col-span-5">
             <ProgrammeFinder />
           </div>
         </div>
