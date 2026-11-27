@@ -60,10 +60,21 @@ export default function Hero() {
             fetchPriority="high"
             className="absolute inset-0 size-full object-cover"
           />
-          {/* Keeps headline contrast well above 4.5:1 whatever the photograph looks like. */}
+          {/*
+            Keeps headline contrast well above 4.5:1 whatever the photograph looks like, but a
+            flat wash strong enough to do that over the whole image leaves nothing recognisable
+            as a photograph — on a phone, where the hero stacks into one column and the old
+            version sat at a uniform 82%, the picture read as a plain dark rectangle.
+
+            A top-to-bottom gradient instead: strongest where the headline and paragraph sit,
+            easing open toward the foot of the hero, where only the buttons (their own
+            background), a faint label and the white-tile badges remain — none of which need
+            the scrim's help. The photo gets to actually look like something without the text
+            above it losing any contrast.
+          */}
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-navy-950/82 lg:bg-gradient-to-r lg:from-navy-950/96 lg:via-navy-950/86 lg:to-navy-950/58"
+            className="absolute inset-0 bg-gradient-to-b from-navy-950/92 via-navy-950/82 to-navy-950/48 lg:bg-gradient-to-r lg:from-navy-950/96 lg:via-navy-950/86 lg:to-navy-950/58"
           />
         </>
       ) : (
